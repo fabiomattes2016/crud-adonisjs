@@ -3,6 +3,18 @@ const hasher = require('hasher')
 const $ = require('jquery')(window)
 // const Handlebars = require('handlebars')
 
+// function spawnNotification(options) {
+//   var n = new Notification(options.title, options.opt)
+
+//   if (options.link !== '') {
+//     n.addEventListener("click", function() {
+//       n.cose();
+//       window.focus()
+//       window.location.href = options.link
+//     })
+//   }
+// }
+
 let home = `
       <div class="container">
       <button id="btnNew" class="btn btn-dark mt-2" style="margin: 15px">Novo</button>
@@ -58,6 +70,8 @@ let home = `
 crossroads.addRoute('/', () => {
   render(home)
 
+  // Notification.requestPermission()
+
   let endpoint = 'http://localhost:3333/products'
   let option = null
   let id, description, price, stock, line
@@ -94,7 +108,7 @@ crossroads.addRoute('/', () => {
   })
 
   // NEW
-  jQuery('#btnNew').click(function() {
+  jQuery('#btnNew').on('click', function() {
     option = 'create'
     id = null
 
@@ -130,6 +144,7 @@ crossroads.addRoute('/', () => {
   jQuery(document).on('click', '.btnDelete', function() {
     line = jQuery(this)
     id = parseInt(jQuery(this).closest('tr').find('td:eq(0)').text())
+    description = jQuery(this).closest('tr').find('td:eq(1)').text()
     Swal.fire({
       title: 'Deseja realmente excluir o registro?',
       showDenyButton: true,
@@ -143,6 +158,14 @@ crossroads.addRoute('/', () => {
           data: {id:id},
           success: function() {
             tableProducts.row(line.parents('tr')).remove().draw()
+            // spawnNotification({
+            //   opt: {
+            //     body: `Produto ${description} excluido!`,
+            //     icon: ""
+            //   },
+            //   title: "Operação de exclusão",
+            //   link: "#"
+            // })
           }
         }).then(res => {
           Swal.fire(`${res.message}`, '', 'success')
@@ -196,6 +219,10 @@ crossroads.addRoute('/', () => {
 
     jQuery("#modalCRUD").modal('hide')
   })
+
+  setInterval(function() {
+    tableProducts.ajax.reload(null, false)
+  }, 3000)
 })
 
 function render(component) {
