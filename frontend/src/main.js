@@ -1,19 +1,6 @@
 const crossroads = require('crossroads')
 const hasher = require('hasher')
 const $ = require('jquery')(window)
-// const Handlebars = require('handlebars')
-
-// function spawnNotification(options) {
-//   var n = new Notification(options.title, options.opt)
-
-//   if (options.link !== '') {
-//     n.addEventListener("click", function() {
-//       n.cose();
-//       window.focus()
-//       window.location.href = options.link
-//     })
-//   }
-// }
 
 let home = `
       <div class="container">
@@ -70,8 +57,6 @@ let home = `
 crossroads.addRoute('/', () => {
   render(home)
 
-  // Notification.requestPermission()
-
   let endpoint = 'http://localhost:3333/products'
   let option = null
   let id, description, price, stock, line
@@ -113,8 +98,6 @@ crossroads.addRoute('/', () => {
     id = null
 
     jQuery("#formProducts").trigger("reset")
-    // jQuery(".modal-header").css("background-color", "#23272b")
-    // jQuery(".modal-header").css("color", "white")
     jQuery(".modal-title").text("Novo Produto")
     jQuery("#modalCRUD").modal('show')
   })
@@ -134,8 +117,6 @@ crossroads.addRoute('/', () => {
     jQuery("#price").val(price)
     jQuery("#stock").val(stock)
 
-    // jQuery(".modal-header").css("background-color", "#7303c0")
-    // jQuery(".modal-header").css("color", "white")
     jQuery(".modal-title").text("Editar produto")
     jQuery("#modalCRUD").modal("show")
   })
@@ -158,14 +139,6 @@ crossroads.addRoute('/', () => {
           data: {id:id},
           success: function() {
             tableProducts.row(line.parents('tr')).remove().draw()
-            // spawnNotification({
-            //   opt: {
-            //     body: `Produto ${description} excluido!`,
-            //     icon: ""
-            //   },
-            //   title: "Operação de exclusão",
-            //   link: "#"
-            // })
           }
         }).then(res => {
           Swal.fire(`${res.message}`, '', 'success')
