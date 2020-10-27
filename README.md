@@ -3,6 +3,8 @@
 
 # Passos para usar
 
+Criar o banco de dados
+
 git clone https://github.com/fabiomattes2016/crud-adonisjs
 
 cd crud-adonisjs
